@@ -1,4 +1,5 @@
 {
+  "_descripcion": "Indicio de ataque de red con trafico extrano hacia el exterior",
   "trafico_anomalo": true,
   "intentos_conexion_externa": true
 }

@@ -1,0 +1,31 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-19 03:14
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - intentos conexion externa
+   - trafico anomalo
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Indicio de ataque de red
+   Regla disparada: Indicio de ataque de red (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: indicio_ataque_red
+
+Iteracion 2 - conjunto de conflicto: Requiere intervencion de seguridad
+   Regla disparada: Requiere intervencion de seguridad (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: requiere_intervencion_seguridad
+
+Iteracion 3 - conjunto de conflicto: Diagnostico de seguridad
+   Regla disparada: Diagnostico de seguridad (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: diagnostico_seguridad
+
+Iteracion 4 - sin reglas aplicables. Fin de la inferencia.
+
+3. DIAGNOSTICOS Y RECOMENDACIONES (DE MAYOR A MENOR PRIORIDAD)
+
+   1. Diagnostico: Diagnostico de seguridad (prioridad 10)
+      Recomendacion: Aislar el segmento de red afectado, revisar los registros del firewall en busca de las IP externas involucradas y notificar al responsable de seguridad de la informacion antes de continuar con otros diagnosticos.
+
+========================================================================

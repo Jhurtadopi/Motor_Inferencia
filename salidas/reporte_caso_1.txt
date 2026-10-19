@@ -1,0 +1,54 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-19 03:14
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - desconexiones frecuentes
+   - latencia alta
+   - perdida paquetes
+   - senal inalambrica debil
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Interferencia electromagnetica en la red inalambrica, Congestion o saturacion del ancho de banda
+   Criterio 'prioridad' -> quedan: Interferencia electromagnetica en la red inalambrica, Congestion o saturacion del ancho de banda
+   Criterio 'especificidad' -> quedan: Interferencia electromagnetica en la red inalambrica, Congestion o saturacion del ancho de banda
+   Criterio 'recencia' -> quedan: Interferencia electromagnetica en la red inalambrica, Congestion o saturacion del ancho de banda
+   Criterio 'detalle_consecuente' -> quedan: Interferencia electromagnetica en la red inalambrica, Congestion o saturacion del ancho de banda
+   Criterio 'orden_en_base_conocimiento' -> quedan: Interferencia electromagnetica en la red inalambrica
+   Regla disparada: Interferencia electromagnetica en la red inalambrica (criterio de seleccion: orden_en_base_conocimiento)
+   Nuevos hechos agregados: interferencia_electromagnetica
+
+Iteracion 2 - conjunto de conflicto: Congestion o saturacion del ancho de banda, Degradacion de rendimiento por interferencia
+   Criterio 'prioridad' -> quedan: Congestion o saturacion del ancho de banda, Degradacion de rendimiento por interferencia
+   Criterio 'especificidad' -> quedan: Congestion o saturacion del ancho de banda
+   Regla disparada: Congestion o saturacion del ancho de banda (criterio de seleccion: especificidad)
+   Nuevos hechos agregados: congestion_red
+
+Iteracion 3 - conjunto de conflicto: Degradacion de rendimiento por interferencia, Degradacion de rendimiento por congestion
+   Criterio 'prioridad' -> quedan: Degradacion de rendimiento por interferencia, Degradacion de rendimiento por congestion
+   Criterio 'especificidad' -> quedan: Degradacion de rendimiento por interferencia, Degradacion de rendimiento por congestion
+   Criterio 'recencia' -> quedan: Degradacion de rendimiento por congestion
+   Regla disparada: Degradacion de rendimiento por congestion (criterio de seleccion: recencia)
+   Nuevos hechos agregados: degradacion_rendimiento_red
+
+Iteracion 4 - conjunto de conflicto: Degradacion de rendimiento por interferencia, Diagnostico de degradacion de rendimiento
+   Criterio 'prioridad' -> quedan: Degradacion de rendimiento por interferencia, Diagnostico de degradacion de rendimiento
+   Criterio 'especificidad' -> quedan: Degradacion de rendimiento por interferencia, Diagnostico de degradacion de rendimiento
+   Criterio 'recencia' -> quedan: Diagnostico de degradacion de rendimiento
+   Regla disparada: Diagnostico de degradacion de rendimiento (criterio de seleccion: recencia)
+   Nuevos hechos agregados: diagnostico_rendimiento
+
+Iteracion 5 - conjunto de conflicto: Degradacion de rendimiento por interferencia
+   Regla disparada: Degradacion de rendimiento por interferencia (criterio de seleccion: conjunto_de_conflicto_unitario)
+   No se agregaron hechos nuevos (ya existian)
+
+Iteracion 6 - sin reglas aplicables. Fin de la inferencia.
+
+3. DIAGNOSTICOS Y RECOMENDACIONES (DE MAYOR A MENOR PRIORIDAD)
+
+   1. Diagnostico: Diagnostico de degradacion de rendimiento (prioridad 0)
+      Recomendacion: Medir el uso real del ancho de banda, revisar la ubicacion del punto de acceso inalambrico y actualizar o revertir los controladores de red instalados recientemente.
+
+========================================================================

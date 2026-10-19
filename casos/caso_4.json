@@ -1,0 +1,6 @@
+{
+  "_descripcion": "Equipo sin conexion: varias causas de capa de red a la vez (DHCP, cable y router)",
+  "dhcp_sin_respuesta": true,
+  "cable_danado": true,
+  "router_no_responde_ping": true
+}

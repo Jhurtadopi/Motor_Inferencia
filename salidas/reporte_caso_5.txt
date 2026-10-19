@@ -1,0 +1,95 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-19 03:14
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - dns no resuelve
+   - intentos conexion externa
+   - latencia alta
+   - lentitud tras actualizacion drivers
+   - perdida paquetes
+   - trafico anomalo
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Congestion o saturacion del ancho de banda, Problema de resolucion DNS reportado directamente, Indicio de ataque de red, Incompatibilidad del controlador de red
+   Criterio 'prioridad' -> quedan: Indicio de ataque de red
+   Regla disparada: Indicio de ataque de red (criterio de seleccion: prioridad)
+   Nuevos hechos agregados: indicio_ataque_red
+
+Iteracion 2 - conjunto de conflicto: Congestion o saturacion del ancho de banda, Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Requiere intervencion de seguridad
+   Criterio 'prioridad' -> quedan: Requiere intervencion de seguridad
+   Regla disparada: Requiere intervencion de seguridad (criterio de seleccion: prioridad)
+   Nuevos hechos agregados: requiere_intervencion_seguridad
+
+Iteracion 3 - conjunto de conflicto: Congestion o saturacion del ancho de banda, Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Diagnostico de seguridad
+   Criterio 'prioridad' -> quedan: Diagnostico de seguridad
+   Regla disparada: Diagnostico de seguridad (criterio de seleccion: prioridad)
+   Nuevos hechos agregados: diagnostico_seguridad
+
+Iteracion 4 - conjunto de conflicto: Congestion o saturacion del ancho de banda, Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'prioridad' -> quedan: Congestion o saturacion del ancho de banda, Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'especificidad' -> quedan: Congestion o saturacion del ancho de banda
+   Regla disparada: Congestion o saturacion del ancho de banda (criterio de seleccion: especificidad)
+   Nuevos hechos agregados: congestion_red
+
+Iteracion 5 - conjunto de conflicto: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Degradacion de rendimiento por congestion
+   Criterio 'prioridad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Degradacion de rendimiento por congestion
+   Criterio 'especificidad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Degradacion de rendimiento por congestion
+   Criterio 'recencia' -> quedan: Degradacion de rendimiento por congestion
+   Regla disparada: Degradacion de rendimiento por congestion (criterio de seleccion: recencia)
+   Nuevos hechos agregados: degradacion_rendimiento_red
+
+Iteracion 6 - conjunto de conflicto: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Diagnostico de degradacion de rendimiento
+   Criterio 'prioridad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Diagnostico de degradacion de rendimiento
+   Criterio 'especificidad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red, Diagnostico de degradacion de rendimiento
+   Criterio 'recencia' -> quedan: Diagnostico de degradacion de rendimiento
+   Regla disparada: Diagnostico de degradacion de rendimiento (criterio de seleccion: recencia)
+   Nuevos hechos agregados: diagnostico_rendimiento
+
+Iteracion 7 - conjunto de conflicto: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'prioridad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'especificidad' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'recencia' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'detalle_consecuente' -> quedan: Problema de resolucion DNS reportado directamente, Incompatibilidad del controlador de red
+   Criterio 'orden_en_base_conocimiento' -> quedan: Problema de resolucion DNS reportado directamente
+   Regla disparada: Problema de resolucion DNS reportado directamente (criterio de seleccion: orden_en_base_conocimiento)
+   Nuevos hechos agregados: posible_problema_dns
+
+Iteracion 8 - conjunto de conflicto: Incompatibilidad del controlador de red, Servicios internos inaccesibles por DNS
+   Criterio 'prioridad' -> quedan: Incompatibilidad del controlador de red, Servicios internos inaccesibles por DNS
+   Criterio 'especificidad' -> quedan: Incompatibilidad del controlador de red, Servicios internos inaccesibles por DNS
+   Criterio 'recencia' -> quedan: Servicios internos inaccesibles por DNS
+   Regla disparada: Servicios internos inaccesibles por DNS (criterio de seleccion: recencia)
+   Nuevos hechos agregados: servicios_internos_inaccesibles
+
+Iteracion 9 - conjunto de conflicto: Incompatibilidad del controlador de red, Diagnostico de configuracion de servicios
+   Criterio 'prioridad' -> quedan: Incompatibilidad del controlador de red, Diagnostico de configuracion de servicios
+   Criterio 'especificidad' -> quedan: Incompatibilidad del controlador de red, Diagnostico de configuracion de servicios
+   Criterio 'recencia' -> quedan: Diagnostico de configuracion de servicios
+   Regla disparada: Diagnostico de configuracion de servicios (criterio de seleccion: recencia)
+   Nuevos hechos agregados: diagnostico_configuracion
+
+Iteracion 10 - conjunto de conflicto: Incompatibilidad del controlador de red
+   Regla disparada: Incompatibilidad del controlador de red (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: incompatibilidad_driver_red
+
+Iteracion 11 - conjunto de conflicto: Degradacion de rendimiento por controlador de red
+   Regla disparada: Degradacion de rendimiento por controlador de red (criterio de seleccion: conjunto_de_conflicto_unitario)
+   No se agregaron hechos nuevos (ya existian)
+
+Iteracion 12 - sin reglas aplicables. Fin de la inferencia.
+
+3. DIAGNOSTICOS Y RECOMENDACIONES (DE MAYOR A MENOR PRIORIDAD)
+
+   1. Diagnostico: Diagnostico de seguridad (prioridad 10)
+      Recomendacion: Aislar el segmento de red afectado, revisar los registros del firewall en busca de las IP externas involucradas y notificar al responsable de seguridad de la informacion antes de continuar con otros diagnosticos.
+
+   2. Diagnostico: Diagnostico de degradacion de rendimiento (prioridad 0)
+      Recomendacion: Medir el uso real del ancho de banda, revisar la ubicacion del punto de acceso inalambrico y actualizar o revertir los controladores de red instalados recientemente.
+
+   3. Diagnostico: Diagnostico de configuracion de servicios (prioridad 0)
+      Recomendacion: Revisar las reglas del firewall que afectan los puertos de los servicios internos y validar la configuracion del servidor DNS local.
+
+========================================================================

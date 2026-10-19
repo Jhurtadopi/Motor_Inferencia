@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Experto - Diagnóstico de redes</title>
+<style>
+  :root {
+    --fondo: #f4f6f4;
+    --superficie: #ffffff;
+    --texto: #1c2420;
+    --suave: #5a665f;
+    --borde: #d5dcd7;
+    --acento: #1f6b4a;
+    --acento-texto: #ffffff;
+    --acento-fondo: #e3f1ea;
+    --nuevo: #b45309;
+    --nuevo-fondo: #fdf0dc;
+    --error: #a12622;
+    --error-fondo: #fbe9e8;
+    --aviso-fondo: #fff6d8;
+    --radio: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #121715;
+      --superficie: #1b221f;
+      --texto: #e6ece8;
+      --suave: #9aa89f;
+      --borde: #34403a;
+      --acento: #5fc596;
+      --acento-texto: #0d1612;
+      --acento-fondo: #1d3328;
+      --nuevo: #f0b45a;
+      --nuevo-fondo: #3a2c14;
+      --error: #ff9b94;
+      --error-fondo: #3b1c1a;
+      --aviso-fondo: #3a3316;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .contenedor { max-width: 1120px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  h2 { font-size: 1.1rem; margin: 0 0 12px; }
+  .subtitulo { color: var(--suave); margin: 0 0 20px; }
+  section.tarjeta {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .numero {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--acento); color: var(--acento-texto);
+    font-size: .85rem; font-weight: 600; margin-right: 8px;
+  }
+  .fila { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, .boton {
+    font: inherit; cursor: pointer;
+    border: 1px solid var(--borde); background: var(--superficie); color: var(--texto);
+    border-radius: 8px; padding: 7px 14px;
+  }
+  button:hover, .boton:hover { border-color: var(--acento); }
+  button.primario { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); font-weight: 600; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button:focus-visible, .boton:focus-within, select:focus-visible, input:focus-visible {
+    outline: 2px solid var(--acento); outline-offset: 2px;
+  }
+  .boton input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .boton { position: relative; display: inline-block; }
+  select { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); max-width: 100%; }
+  .estado { color: var(--suave); margin: 10px 0 0; }
+  .estado strong { color: var(--texto); }
+  #aviso { margin: 0 0 16px; }
+  .mensaje { border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+  .mensaje.error { background: var(--error-fondo); color: var(--error); }
+  .mensaje.aviso { background: var(--aviso-fondo); }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--acento); font-weight: 600; }
+  .tabla-wrap { overflow-x: auto; margin-top: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+  th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--borde); }
+  th { color: var(--suave); font-weight: 600; white-space: nowrap; }
+  .sintomas { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 6px 16px; margin: 12px 0; }
+  .sintomas label { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; cursor: pointer; }
+  .sintomas input { margin-top: 4px; accent-color: var(--acento); }
+  .chip {
+    display: inline-block; padding: 2px 9px; margin: 2px 4px 2px 0;
+    border-radius: 999px; border: 1px solid var(--borde); font-size: .82rem;
+    background: var(--superficie);
+  }
+  .chip.inicial { background: var(--acento-fondo); border-color: transparent; }
+  .chip.inferido { border-color: var(--acento); }
+  .chip.nuevo { background: var(--nuevo-fondo); border-color: var(--nuevo); color: var(--nuevo); font-weight: 600; }
+  .columnas { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .columnas { grid-template-columns: 1fr; } }
+  #memoria { position: sticky; top: 12px; }
+  .vacio { color: var(--suave); font-style: italic; }
+  .paso { border: 1px solid var(--borde); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .paso.actual { border-color: var(--acento); box-shadow: 0 0 0 2px var(--acento-fondo); }
+  .paso h3 { font-size: .98rem; margin: 0 0 8px; }
+  .paso .etiqueta { color: var(--suave); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; margin: 10px 0 4px; }
+  .candidata { padding: 4px 0; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+  .candidata.elegida { font-weight: 600; color: var(--acento); }
+  .candidata .metricas { color: var(--suave); font-size: .82rem; font-weight: 400; }
+  .criterio { font-size: .88rem; color: var(--suave); margin: 2px 0; }
+  .regla-disparada { background: var(--acento-fondo); border-radius: 8px; padding: 8px 12px; margin-top: 4px; }
+  .regla-disparada .si { color: var(--suave); font-size: .9rem; }
+  .fin { text-align: center; color: var(--suave); }
+  .recomendacion { border-left: 4px solid var(--acento); padding: 8px 14px; margin: 10px 0; background: var(--acento-fondo); border-radius: 0 8px 8px 0; }
+  .recomendacion.primera { border-left-color: var(--nuevo); background: var(--nuevo-fondo); }
+  .recomendacion .titulo { font-weight: 600; }
+  .recomendacion .prio { color: var(--suave); font-size: .82rem; font-weight: 400; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="contenedor">
+  <h1>Sistema Experto: diagnóstico de fallas en redes y equipos</h1>
+  <p class="subtitulo">Cargue una base de conocimiento, indique los síntomas observados y siga la inferencia paso a paso.</p>
+
+  <div id="aviso" role="alert" aria-live="assertive"></div>
+
+  <section class="tarjeta" aria-labelledby="t1">
+    <h2 id="t1"><span class="numero">1</span>Base de conocimiento</h2>
+    <div class="fila">
+      <label class="boton">Cargar archivo .json
+        <input type="file" id="archivoKb" accept=".json,application/json">
+      </label>
+      <button type="button" id="btnKbDefecto">Usar la base por defecto</button>
+    </div>
+    <p class="estado" id="estadoKb">Cargando…</p>
+    <details>
+      <summary>Ver las reglas cargadas</summary>
+      <div class="tabla-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Regla</th><th>SI (antecedentes)</th><th>ENTONCES (consecuentes)</th><th>Prioridad</th></tr></thead>
+          <tbody id="tablaReglas"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="tarjeta" aria-labelledby="t2">
+    <h2 id="t2"><span class="numero">2</span>Hechos iniciales (memoria de trabajo)</h2>
+    <div class="fila">
+      <label class="boton">Cargar caso .json
+        <input type="file" id="archivoCaso" accept=".json,application/json">
+      </label>
+      <label for="selCaso" class="vacio" style="font-style:normal">o un caso de ejemplo:</label>
+      <select id="selCaso"><option value="">Seleccione…</option></select>
+      <button type="button" id="btnNinguno">Desmarcar todos</button>
+    </div>
+    <p class="estado" id="estadoCaso"></p>
+    <div class="sintomas" id="sintomas" role="group" aria-label="Síntomas observados"></div>
+  </section>
+
+  <section class="tarjeta" aria-labelledby="t3">
+    <h2 id="t3"><span class="numero">3</span>Inferencia paso a paso</h2>
+    <div class="fila">
+      <button type="button" class="primario" id="btnSiguiente">Siguiente paso ▶</button>
+      <button type="button" id="btnTodo">Ejecutar todo ⏭</button>
+      <button type="button" id="btnReiniciar">Reiniciar ↺</button>
+    </div>
+    <div class="columnas" style="margin-top:14px">
+      <div id="pasos" aria-live="polite"><p class="vacio">Pulse «Siguiente paso» para iniciar la inferencia.</p></div>
+      <aside class="paso" id="memoria" aria-label="Memoria de trabajo">
+        <h3>Memoria de trabajo</h3>
+        <div id="memoriaContenido"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="tarjeta" id="panelRecomendacion" aria-labelledby="t4" hidden>
+    <h2 id="t4"><span class="numero">4</span>Recomendación del sistema experto</h2>
+    <div id="recomendaciones"></div>
+    <div class="fila" style="margin-top:12px">
+      <button type="button" id="btnDescargar">Descargar reporte (.txt)</button>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+
+const estado = {
+  kb: null,            // { nombre, reglas, sintomas }
+  seleccion: new Set(),// hechos marcados
+  resultado: null,     // respuesta de /api/inferir
+  mostrados: 0,        // pasos revelados
+};
+
+const $ = (id) => document.getElementById(id);
+const etiqueta = (hecho) => hecho.replace(/_/g, " ");
+
+/* Crea un elemento sin usar innerHTML: el texto de las reglas puede venir de un archivo del usuario. */
+function el(tag, props, ...hijos) {
+  const nodo = document.createElement(tag);
+  for (const [clave, valor] of Object.entries(props || {})) {
+    if (clave === "class") nodo.className = valor;
+    else nodo.setAttribute(clave, valor);
+  }
+  for (const hijo of hijos.flat()) {
+    if (hijo === null || hijo === undefined || hijo === false) continue;
+    nodo.append(hijo.nodeType ? hijo : document.createTextNode(String(hijo)));
+  }
+  return nodo;
+}
+
+async function api(ruta, cuerpo) {
+  const opciones = cuerpo === undefined ? {} : {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cuerpo),
+  };
+  const respuesta = await fetch(ruta, opciones);
+  const datos = await respuesta.json().catch(() => ({}));
+  if (!respuesta.ok) throw new Error(datos.error || ("Error " + respuesta.status));
+  return datos;
+}
+
+function mostrarMensajes(mensajes) {
+  const caja = $("aviso");
+  caja.replaceChildren(...mensajes.map(([tipo, texto]) => el("div", { class: "mensaje " + tipo }, texto)));
+}
+
+function leerArchivoJson(archivo) {
+  return new Promise((resolver, rechazar) => {
+    const lector = new FileReader();
+    lector.onerror = () => rechazar(new Error("No se pudo leer el archivo"));
+    lector.onload = () => {
+      try { resolver(JSON.parse(lector.result)); }
+      catch (e) { rechazar(new Error("«" + archivo.name + "» no es un JSON válido")); }
+    };
+    lector.readAsText(archivo, "utf-8");
+  });
+}
+
+/* ---------------------------- Base de conocimiento ---------------------------- */
+
+function aplicarKb(kb) {
+  estado.kb = kb;
+  const conocidos = new Set(kb.sintomas);
+  estado.seleccion = new Set([...estado.seleccion].filter((h) => conocidos.has(h)));
+  $("estadoKb").replaceChildren(
+    el("strong", {}, kb.reglas.length + " reglas"), " cargadas desde ", el("strong", {}, kb.nombre),
+    " · ", kb.sintomas.length, " síntomas de entrada"
+  );
+  $("tablaReglas").replaceChildren(...kb.reglas.map((r, i) => el("tr", {},
+    el("td", {}, i + 1),
+    el("td", {}, r.nombre),
+    el("td", {}, r.antecedentes.map(etiqueta).join(" Y ")),
+    el("td", {}, r.consecuentes.map(etiqueta).join(" Y ")),
+    el("td", {}, r.prioridad)
+  )));
+  dibujarSintomas();
+  reiniciar();
+}
+
+async function cargarKbDefecto() {
+  try {
+    const datos = await api("/api/kb/defecto");
+    mostrarMensajes([]);
+    aplicarKb({ nombre: datos.nombre, reglas: datos.reglas, sintomas: datos.sintomas });
+  } catch (e) { mostrarMensajes([["error", e.message]]); }
+}
+
+async function cargarKbArchivo(archivo) {
+  try {
+    const datos = await leerArchivoJson(archivo);
+    const respuesta = await api("/api/kb", { datos });
+    mostrarMensajes([]);
+    aplicarKb({ nombre: archivo.name, reglas: respuesta.reglas, sintomas: respuesta.sintomas });
+  } catch (e) { mostrarMensajes([["error", "Base de conocimiento no válida: " + e.message]]); }
+}
+
+/* --------------------------------- Hechos --------------------------------- */
+
+function dibujarSintomas() {
+  if (!estado.kb) return;
+  $("sintomas").replaceChildren(...estado.kb.sintomas.map((hecho) => {
+    const caja = el("input", { type: "checkbox", value: hecho });
+    caja.checked = estado.seleccion.has(hecho);
+    caja.addEventListener("change", () => {
+      caja.checked ? estado.seleccion.add(hecho) : estado.seleccion.delete(hecho);
+      reiniciar();
+    });
+    return el("label", {}, caja, etiqueta(hecho));
+  }));
+}
+
+function aplicarHechos(hechos, origen) {
+  const conocidos = new Set(estado.kb.reglas.flatMap((r) => [...r.antecedentes, ...r.consecuentes]));
+  const entrada = new Set(estado.kb.sintomas);
+  const desconocidos = hechos.filter((h) => !conocidos.has(h));
+  const intermedios = hechos.filter((h) => conocidos.has(h) && !entrada.has(h));
+  estado.seleccion = new Set(hechos.filter((h) => entrada.has(h)));
+  dibujarSintomas();
+  reiniciar();
+
+  const mensajes = [];
+  if (desconocidos.length) mensajes.push(["aviso", "Hechos ignorados por no existir en la base de conocimiento: " + desconocidos.join(", ")]);
+  if (intermedios.length) mensajes.push(["aviso", "Hechos ignorados por ser conclusiones y no síntomas: " + intermedios.join(", ")]);
+  mostrarMensajes(mensajes);
+  $("estadoCaso").textContent = origen + ": " + estado.seleccion.size + " síntoma(s) marcado(s)";
+}
+
+function hechosDesdeJson(datos) {
+  if (Array.isArray(datos)) return datos.map(String);
+  if (datos && typeof datos === "object") {
+    return Object.entries(datos).filter(([k]) => !k.startsWith("_")).map(([k, v]) => {
+      if (typeof v !== "boolean") throw new Error("El valor de «" + k + "» debe ser true o false");
+      return v ? k : null;
+    }).filter(Boolean);
+  }
+  throw new Error("El archivo debe contener un objeto o una lista");
+}
+
+async function cargarCasoArchivo(archivo) {
+  try {
+    aplicarHechos(hechosDesdeJson(await leerArchivoJson(archivo)), "Archivo " + archivo.name);
+  } catch (e) { mostrarMensajes([["error", "Caso no válido: " + e.message]]); }
+}
+
+/* ------------------------------ Inferencia ------------------------------ */
+
+function reiniciar() {
+  estado.resultado = null;
+  estado.mostrados = 0;
+  dibujar();
+}
+
+async function calcular() {
+  if (estado.resultado) return true;
+  try {
+    estado.resultado = await api("/api/inferir", { reglas: estado.kb.reglas, hechos: [...estado.seleccion] });
+    return true;
+  } catch (e) {
+    mostrarMensajes([["error", e.message]]);
+    return false;
+  }
+}
+
+async function siguiente() {
+  if (!(await calcular())) return;
+  if (estado.mostrados < estado.resultado.pasos.length) estado.mostrados++;
+  dibujar(true);
+}
+
+async function ejecutarTodo() {
+  if (!(await calcular())) return;
+  estado.mostrados = estado.resultado.pasos.length;
+  dibujar(true);
+}
+
+function chips(lista, clase) {
+  return lista.length ? lista.map((h) => el("span", { class: "chip " + clase }, etiqueta(h))) : [el("span", { class: "vacio" }, "ninguno")];
+}
+
+function tarjetaPaso(paso, esActual) {
+  if (paso.regla === null) {
+    return el("div", { class: "paso fin" + (esActual ? " actual" : "") },
+      el("h3", {}, "Iteración " + paso.iteracion),
+      "Sin reglas aplicables: fin de la inferencia.");
+  }
+  const unitario = paso.conflicto.length === 1;
+  return el("div", { class: "paso" + (esActual ? " actual" : "") },
+    el("h3", {}, "Iteración " + paso.iteracion),
+    el("div", { class: "etiqueta" }, "Conjunto de conflicto (" + paso.conflicto.length + ")"),
+    paso.conflicto.map((c) => el("div", { class: "candidata" + (c.nombre === paso.regla.nombre ? " elegida" : "") },
+      (c.nombre === paso.regla.nombre ? "✓ " : "• ") + c.nombre,
+      el("span", { class: "metricas" },
+        "prioridad " + c.prioridad + " · antecedentes " + c.especificidad + " · recencia " + c.recencia))),
+    el("div", { class: "etiqueta" }, "Resolución del conflicto"),
+    unitario
+      ? el("div", { class: "criterio" }, "Una sola regla aplicable: no hay conflicto que resolver.")
+      : paso.descartes.map((d) => el("div", { class: "criterio" },
+          "Criterio «" + d.criterio.replace(/_/g, " ") + "» → quedan " + d.quedan.length + ": " + d.quedan.join(", "))),
+    el("div", { class: "etiqueta" }, "Regla disparada"),
+    el("div", { class: "regla-disparada" },
+      el("strong", {}, paso.regla.nombre),
+      el("div", { class: "si" }, "SI " + paso.regla.antecedentes.map(etiqueta).join(" Y ")),
+      el("div", { class: "si" }, "ENTONCES " + paso.regla.consecuentes.map(etiqueta).join(" Y "))),
+    el("div", { class: "etiqueta" }, "Hechos nuevos"),
+    paso.nuevos_hechos.length ? chips(paso.nuevos_hechos, "nuevo") : el("span", { class: "vacio" }, "ninguno (ya existían)"));
+}
+
+function dibujarMemoria() {
+  const r = estado.resultado;
+  const iniciales = r ? r.hechos_iniciales : [...estado.seleccion].sort();
+  const revelados = r ? r.pasos.slice(0, estado.mostrados) : [];
+  const inferidos = revelados.flatMap((p) => p.nuevos_hechos);
+  const ultimo = revelados.length ? revelados[revelados.length - 1].nuevos_hechos : [];
+  $("memoriaContenido").replaceChildren(el("div", {},
+    el("div", { class: "etiqueta" }, "Hechos iniciales (" + iniciales.length + ")"),
+    chips(iniciales, "inicial"),
+    el("div", { class: "etiqueta" }, "Hechos inferidos (" + inferidos.length + ")"),
+    inferidos.length
+      ? inferidos.map((h) => el("span", { class: "chip " + (ultimo.includes(h) ? "nuevo" : "inferido") }, etiqueta(h)))
+      : el("span", { class: "vacio" }, "ninguno todavía")));
+}
+
+function dibujar(desplazar) {
+  const r = estado.resultado;
+  const total = r ? r.pasos.length : 0;
+  const terminado = r && estado.mostrados === total;
+
+  if (!r || estado.mostrados === 0) {
+    $("pasos").replaceChildren(el("p", { class: "vacio" }, "Pulse «Siguiente paso» para iniciar la inferencia."));
+  } else {
+    $("pasos").replaceChildren(...r.pasos.slice(0, estado.mostrados)
+      .map((p, i) => tarjetaPaso(p, i === estado.mostrados - 1)));
+  }
+  dibujarMemoria();
+
+  $("btnSiguiente").disabled = !estado.kb || terminado;
+  $("btnTodo").disabled = !estado.kb || terminado;
+  $("btnSiguiente").textContent = estado.mostrados === 0 ? "Iniciar ▶" : "Siguiente paso ▶";
+
+  const panel = $("panelRecomendacion");
+  panel.hidden = !terminado;
+  if (terminado) {
+    const lista = r.recomendaciones;
+    $("recomendaciones").replaceChildren(...(lista.length
+      ? lista.map((rec, i) => el("div", { class: "recomendacion" + (i === 0 ? " primera" : "") },
+          el("div", { class: "titulo" }, (i + 1) + ". " + rec.diagnostico + " ",
+            el("span", { class: "prio" }, "(prioridad " + rec.prioridad + ")")),
+          el("div", {}, rec.recomendacion)))
+      : [el("p", {}, "No se alcanzó ningún diagnóstico con la información suministrada. Marque más síntomas o consulte a un técnico.")]));
+    if (desplazar) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  } else if (desplazar && r) {
+    const tarjetas = $("pasos").children;
+    tarjetas[tarjetas.length - 1].scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+function descargarReporte() {
+  if (!estado.resultado) return;
+  const enlace = el("a", {
+    href: URL.createObjectURL(new Blob([estado.resultado.reporte], { type: "text/plain;charset=utf-8" })),
+    download: "reporte_diagnostico.txt",
+  });
+  document.body.append(enlace);
+  enlace.click();
+  enlace.remove();
+  setTimeout(() => URL.revokeObjectURL(enlace.href), 1000);
+}
+
+/* ------------------------------ Arranque ------------------------------ */
+
+async function cargarCasos() {
+  try {
+    const { casos } = await api("/api/casos");
+    const sel = $("selCaso");
+    for (const caso of casos) {
+      sel.append(el("option", { value: caso.nombre }, caso.nombre + (caso.descripcion ? " — " + caso.descripcion : "")));
+    }
+    sel.addEventListener("change", () => {
+      const caso = casos.find((c) => c.nombre === sel.value);
+      if (caso) aplicarHechos(caso.hechos, "Caso " + caso.nombre);
+    });
+  } catch (e) { mostrarMensajes([["error", e.message]]); }
+}
+
+$("btnSiguiente").addEventListener("click", siguiente);
+$("btnTodo").addEventListener("click", ejecutarTodo);
+$("btnReiniciar").addEventListener("click", reiniciar);
+$("btnDescargar").addEventListener("click", descargarReporte);
+$("btnKbDefecto").addEventListener("click", cargarKbDefecto);
+$("btnNinguno").addEventListener("click", () => { estado.seleccion.clear(); dibujarSintomas(); reiniciar(); $("estadoCaso").textContent = ""; });
+$("archivoKb").addEventListener("change", (e) => { if (e.target.files[0]) cargarKbArchivo(e.target.files[0]); e.target.value = ""; });
+$("archivoCaso").addEventListener("change", (e) => { if (e.target.files[0]) cargarCasoArchivo(e.target.files[0]); e.target.value = ""; });
+
+dibujar();
+cargarKbDefecto().then(cargarCasos);
+</script>
+</body>
+</html>

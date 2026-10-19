@@ -1,0 +1,9 @@
+{
+  "_descripcion": "Caso mixto: ataque de red, lentitud tras actualizar controladores y DNS",
+  "trafico_anomalo": true,
+  "intentos_conexion_externa": true,
+  "latencia_alta": true,
+  "perdida_paquetes": true,
+  "lentitud_tras_actualizacion_drivers": true,
+  "dns_no_resuelve": true
+}

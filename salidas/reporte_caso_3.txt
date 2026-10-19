@@ -1,0 +1,48 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-19 03:14
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - firewall bloquea puertos
+   - no acceso recursos compartidos
+   - tiene conexion internet
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Falla en la configuracion del firewall, Problema de resolucion DNS con acceso a internet
+   Criterio 'prioridad' -> quedan: Falla en la configuracion del firewall, Problema de resolucion DNS con acceso a internet
+   Criterio 'especificidad' -> quedan: Problema de resolucion DNS con acceso a internet
+   Regla disparada: Problema de resolucion DNS con acceso a internet (criterio de seleccion: especificidad)
+   Nuevos hechos agregados: posible_problema_dns
+
+Iteracion 2 - conjunto de conflicto: Falla en la configuracion del firewall, Servicios internos inaccesibles por DNS
+   Criterio 'prioridad' -> quedan: Falla en la configuracion del firewall, Servicios internos inaccesibles por DNS
+   Criterio 'especificidad' -> quedan: Falla en la configuracion del firewall, Servicios internos inaccesibles por DNS
+   Criterio 'recencia' -> quedan: Servicios internos inaccesibles por DNS
+   Regla disparada: Servicios internos inaccesibles por DNS (criterio de seleccion: recencia)
+   Nuevos hechos agregados: servicios_internos_inaccesibles
+
+Iteracion 3 - conjunto de conflicto: Falla en la configuracion del firewall, Diagnostico de configuracion de servicios
+   Criterio 'prioridad' -> quedan: Falla en la configuracion del firewall, Diagnostico de configuracion de servicios
+   Criterio 'especificidad' -> quedan: Falla en la configuracion del firewall, Diagnostico de configuracion de servicios
+   Criterio 'recencia' -> quedan: Diagnostico de configuracion de servicios
+   Regla disparada: Diagnostico de configuracion de servicios (criterio de seleccion: recencia)
+   Nuevos hechos agregados: diagnostico_configuracion
+
+Iteracion 4 - conjunto de conflicto: Falla en la configuracion del firewall
+   Regla disparada: Falla en la configuracion del firewall (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: falla_configuracion_firewall
+
+Iteracion 5 - conjunto de conflicto: Servicios internos inaccesibles por firewall
+   Regla disparada: Servicios internos inaccesibles por firewall (criterio de seleccion: conjunto_de_conflicto_unitario)
+   No se agregaron hechos nuevos (ya existian)
+
+Iteracion 6 - sin reglas aplicables. Fin de la inferencia.
+
+3. DIAGNOSTICOS Y RECOMENDACIONES (DE MAYOR A MENOR PRIORIDAD)
+
+   1. Diagnostico: Diagnostico de configuracion de servicios (prioridad 0)
+      Recomendacion: Revisar las reglas del firewall que afectan los puertos de los servicios internos y validar la configuracion del servidor DNS local.
+
+========================================================================

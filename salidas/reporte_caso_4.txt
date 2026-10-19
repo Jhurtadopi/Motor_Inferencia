@@ -1,0 +1,67 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-19 03:14
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - cable danado
+   - dhcp sin respuesta
+   - router no responde ping
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Falla de asignacion de IP por DHCP, Falla fisica de conexion, Falla en el router principal
+   Criterio 'prioridad' -> quedan: Falla de asignacion de IP por DHCP, Falla fisica de conexion, Falla en el router principal
+   Criterio 'especificidad' -> quedan: Falla de asignacion de IP por DHCP, Falla fisica de conexion, Falla en el router principal
+   Criterio 'recencia' -> quedan: Falla de asignacion de IP por DHCP, Falla fisica de conexion, Falla en el router principal
+   Criterio 'detalle_consecuente' -> quedan: Falla de asignacion de IP por DHCP, Falla fisica de conexion, Falla en el router principal
+   Criterio 'orden_en_base_conocimiento' -> quedan: Falla de asignacion de IP por DHCP
+   Regla disparada: Falla de asignacion de IP por DHCP (criterio de seleccion: orden_en_base_conocimiento)
+   Nuevos hechos agregados: falla_asignacion_ip
+
+Iteracion 2 - conjunto de conflicto: Falla fisica de conexion, Falla en el router principal, Sin conectividad de capa de red por IP
+   Criterio 'prioridad' -> quedan: Falla fisica de conexion, Falla en el router principal, Sin conectividad de capa de red por IP
+   Criterio 'especificidad' -> quedan: Falla fisica de conexion, Falla en el router principal, Sin conectividad de capa de red por IP
+   Criterio 'recencia' -> quedan: Sin conectividad de capa de red por IP
+   Regla disparada: Sin conectividad de capa de red por IP (criterio de seleccion: recencia)
+   Nuevos hechos agregados: sin_conectividad_capa_red
+
+Iteracion 3 - conjunto de conflicto: Falla fisica de conexion, Falla en el router principal, Diagnostico critico de infraestructura de red
+   Criterio 'prioridad' -> quedan: Falla fisica de conexion, Falla en el router principal, Diagnostico critico de infraestructura de red
+   Criterio 'especificidad' -> quedan: Falla fisica de conexion, Falla en el router principal, Diagnostico critico de infraestructura de red
+   Criterio 'recencia' -> quedan: Diagnostico critico de infraestructura de red
+   Regla disparada: Diagnostico critico de infraestructura de red (criterio de seleccion: recencia)
+   Nuevos hechos agregados: diagnostico_critico_infraestructura
+
+Iteracion 4 - conjunto de conflicto: Falla fisica de conexion, Falla en el router principal
+   Criterio 'prioridad' -> quedan: Falla fisica de conexion, Falla en el router principal
+   Criterio 'especificidad' -> quedan: Falla fisica de conexion, Falla en el router principal
+   Criterio 'recencia' -> quedan: Falla fisica de conexion, Falla en el router principal
+   Criterio 'detalle_consecuente' -> quedan: Falla fisica de conexion, Falla en el router principal
+   Criterio 'orden_en_base_conocimiento' -> quedan: Falla fisica de conexion
+   Regla disparada: Falla fisica de conexion (criterio de seleccion: orden_en_base_conocimiento)
+   Nuevos hechos agregados: falla_fisica_conexion
+
+Iteracion 5 - conjunto de conflicto: Falla en el router principal, Sin conectividad de capa de red por cableado
+   Criterio 'prioridad' -> quedan: Falla en el router principal, Sin conectividad de capa de red por cableado
+   Criterio 'especificidad' -> quedan: Falla en el router principal, Sin conectividad de capa de red por cableado
+   Criterio 'recencia' -> quedan: Sin conectividad de capa de red por cableado
+   Regla disparada: Sin conectividad de capa de red por cableado (criterio de seleccion: recencia)
+   No se agregaron hechos nuevos (ya existian)
+
+Iteracion 6 - conjunto de conflicto: Falla en el router principal
+   Regla disparada: Falla en el router principal (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: falla_router_principal
+
+Iteracion 7 - conjunto de conflicto: Sin conectividad de capa de red por el router
+   Regla disparada: Sin conectividad de capa de red por el router (criterio de seleccion: conjunto_de_conflicto_unitario)
+   No se agregaron hechos nuevos (ya existian)
+
+Iteracion 8 - sin reglas aplicables. Fin de la inferencia.
+
+3. DIAGNOSTICOS Y RECOMENDACIONES (DE MAYOR A MENOR PRIORIDAD)
+
+   1. Diagnostico: Diagnostico critico de infraestructura de red (prioridad 0)
+      Recomendacion: Verificar en este orden la configuracion IP o DHCP, el estado fisico del cableado y la disponibilidad del router y del switch; si el problema persiste, escalar al administrador de red antes de revisar otros componentes.
+
+========================================================================

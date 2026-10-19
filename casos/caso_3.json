@@ -1,0 +1,6 @@
+{
+  "_descripcion": "Servicios internos inaccesibles con internet funcionando (DNS y firewall)",
+  "no_acceso_recursos_compartidos": true,
+  "tiene_conexion_internet": true,
+  "firewall_bloquea_puertos": true
+}

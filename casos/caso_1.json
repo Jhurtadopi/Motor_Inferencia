@@ -1,5 +1,5 @@
-
 {
+  "_descripcion": "Lentitud en red inalambrica: congestion e interferencia al mismo tiempo",
   "latencia_alta": true,
   "perdida_paquetes": true,
   "senal_inalambrica_debil": true,
