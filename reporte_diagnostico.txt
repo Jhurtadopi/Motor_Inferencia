@@ -1,0 +1,31 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-18 21:42
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - latencia alta
+   - perdida paquetes
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Congestion o saturacion del ancho de banda
+   Regla disparada: Congestion o saturacion del ancho de banda (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: congestion_red
+
+Iteracion 2 - conjunto de conflicto: Degradacion de rendimiento por congestion
+   Regla disparada: Degradacion de rendimiento por congestion (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: degradacion_rendimiento_red
+
+Iteracion 3 - conjunto de conflicto: Diagnostico de degradacion de rendimiento
+   Regla disparada: Diagnostico de degradacion de rendimiento (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: diagnostico_rendimiento
+
+Iteracion 4 - conjunto de conflicto: (ninguna regla aplicable)
+
+3. DIAGNOSTICOS Y RECOMENDACIONES PARA APOYAR LA DECISION
+
+   Diagnostico: Diagnostico de degradacion de rendimiento
+   Recomendacion: Medir el uso real del ancho de banda, revisar la ubicacion del punto de acceso inalambrico y actualizar o revertir los controladores de red instalados recientemente.
+
+========================================================================

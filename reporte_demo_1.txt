@@ -1,0 +1,31 @@
+REPORTE DE DIAGNOSTICO AUTOMATICO
+Sistema experto de fallas en redes y equipos informaticos
+Fecha de ejecucion: 2026-10-18 21:38
+========================================================================
+
+1. HECHOS INGRESADOS (MEMORIA DE TRABAJO INICIAL)
+   - ip duplicada
+   - tiene conexion internet
+
+2. TRAZA DE EJECUCION DEL MOTOR DE INFERENCIA
+
+Iteracion 1 - conjunto de conflicto: Conflicto de direccionamiento IP
+   Regla disparada: Conflicto de direccionamiento IP (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: conflicto_ip
+
+Iteracion 2 - conjunto de conflicto: Sin conectividad de capa de red por conflicto de IP
+   Regla disparada: Sin conectividad de capa de red por conflicto de IP (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: sin_conectividad_capa_red
+
+Iteracion 3 - conjunto de conflicto: Diagnostico critico de infraestructura de red
+   Regla disparada: Diagnostico critico de infraestructura de red (criterio de seleccion: conjunto_de_conflicto_unitario)
+   Nuevos hechos agregados: diagnostico_critico_infraestructura
+
+Iteracion 4 - conjunto de conflicto: (ninguna regla aplicable)
+
+3. DIAGNOSTICOS Y RECOMENDACIONES PARA APOYAR LA DECISION
+
+   Diagnostico: Diagnostico critico de infraestructura de red
+   Recomendacion: Verificar en este orden la configuracion IP o DHCP, el estado fisico del cableado y la disponibilidad del router y del switch; si el problema persiste, escalar al administrador de red antes de revisar otros componentes.
+
+========================================================================

@@ -1,0 +1,7 @@
+
+{
+  "latencia_alta": true,
+  "perdida_paquetes": true,
+  "senal_inalambrica_debil": true,
+  "desconexiones_frecuentes": true
+}
