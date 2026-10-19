@@ -1,0 +1,191 @@
+[
+  {
+    "nombre": "Falla de asignacion de IP por DHCP",
+    "antecedentes": ["dhcp_sin_respuesta"],
+    "consecuentes": ["falla_asignacion_ip"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Conflicto de direccionamiento IP",
+    "antecedentes": ["ip_duplicada"],
+    "consecuentes": ["conflicto_ip"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Falla fisica de conexion",
+    "antecedentes": ["cable_danado"],
+    "consecuentes": ["falla_fisica_conexion"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Interferencia electromagnetica en la red inalambrica",
+    "antecedentes": ["senal_inalambrica_debil", "desconexiones_frecuentes"],
+    "consecuentes": ["interferencia_electromagnetica"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Congestion o saturacion del ancho de banda",
+    "antecedentes": ["latencia_alta", "perdida_paquetes"],
+    "consecuentes": ["congestion_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Falla en la configuracion del firewall",
+    "antecedentes": ["firewall_bloquea_puertos"],
+    "consecuentes": ["falla_configuracion_firewall"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Problema de resolucion DNS con acceso a internet",
+    "antecedentes": ["no_acceso_recursos_compartidos", "tiene_conexion_internet"],
+    "consecuentes": ["posible_problema_dns"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Problema de resolucion DNS reportado directamente",
+    "antecedentes": ["dns_no_resuelve"],
+    "consecuentes": ["posible_problema_dns"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Falla en el router principal",
+    "antecedentes": ["router_no_responde_ping"],
+    "consecuentes": ["falla_router_principal"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Falla en el switch o en la configuracion de VLAN",
+    "antecedentes": ["switch_no_reenvia_paquetes", "vlan_mal_configurada"],
+    "consecuentes": ["falla_switch_vlan"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Indicio de ataque de red",
+    "antecedentes": ["trafico_anomalo", "intentos_conexion_externa"],
+    "consecuentes": ["indicio_ataque_red"],
+    "prioridad": 5,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Incompatibilidad del controlador de red",
+    "antecedentes": ["lentitud_tras_actualizacion_drivers"],
+    "consecuentes": ["incompatibilidad_driver_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Sin conectividad de capa de red por IP",
+    "antecedentes": ["falla_asignacion_ip"],
+    "consecuentes": ["sin_conectividad_capa_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Sin conectividad de capa de red por conflicto de IP",
+    "antecedentes": ["conflicto_ip"],
+    "consecuentes": ["sin_conectividad_capa_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Sin conectividad de capa de red por cableado",
+    "antecedentes": ["falla_fisica_conexion"],
+    "consecuentes": ["sin_conectividad_capa_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Sin conectividad de capa de red por el router",
+    "antecedentes": ["falla_router_principal"],
+    "consecuentes": ["sin_conectividad_capa_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Sin conectividad de capa de red por switch o VLAN",
+    "antecedentes": ["falla_switch_vlan"],
+    "consecuentes": ["sin_conectividad_capa_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Degradacion de rendimiento por interferencia",
+    "antecedentes": ["interferencia_electromagnetica"],
+    "consecuentes": ["degradacion_rendimiento_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Degradacion de rendimiento por congestion",
+    "antecedentes": ["congestion_red"],
+    "consecuentes": ["degradacion_rendimiento_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Degradacion de rendimiento por controlador de red",
+    "antecedentes": ["incompatibilidad_driver_red"],
+    "consecuentes": ["degradacion_rendimiento_red"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Servicios internos inaccesibles por firewall",
+    "antecedentes": ["falla_configuracion_firewall"],
+    "consecuentes": ["servicios_internos_inaccesibles"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Servicios internos inaccesibles por DNS",
+    "antecedentes": ["posible_problema_dns"],
+    "consecuentes": ["servicios_internos_inaccesibles"],
+    "prioridad": 0,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Requiere intervencion de seguridad",
+    "antecedentes": ["indicio_ataque_red"],
+    "consecuentes": ["requiere_intervencion_seguridad"],
+    "prioridad": 8,
+    "recomendacion": ""
+  },
+  {
+    "nombre": "Diagnostico critico de infraestructura de red",
+    "antecedentes": ["sin_conectividad_capa_red"],
+    "consecuentes": ["diagnostico_critico_infraestructura"],
+    "prioridad": 0,
+    "recomendacion": "Verificar en este orden la configuracion IP o DHCP, el estado fisico del cableado y la disponibilidad del router y del switch; si el problema persiste, escalar al administrador de red antes de revisar otros componentes."
+  },
+  {
+    "nombre": "Diagnostico de degradacion de rendimiento",
+    "antecedentes": ["degradacion_rendimiento_red"],
+    "consecuentes": ["diagnostico_rendimiento"],
+    "prioridad": 0,
+    "recomendacion": "Medir el uso real del ancho de banda, revisar la ubicacion del punto de acceso inalambrico y actualizar o revertir los controladores de red instalados recientemente."
+  },
+  {
+    "nombre": "Diagnostico de configuracion de servicios",
+    "antecedentes": ["servicios_internos_inaccesibles"],
+    "consecuentes": ["diagnostico_configuracion"],
+    "prioridad": 0,
+    "recomendacion": "Revisar las reglas del firewall que afectan los puertos de los servicios internos y validar la configuracion del servidor DNS local."
+  },
+  {
+    "nombre": "Diagnostico de seguridad",
+    "antecedentes": ["requiere_intervencion_seguridad"],
+    "consecuentes": ["diagnostico_seguridad"],
+    "prioridad": 10,
+    "recomendacion": "Aislar el segmento de red afectado, revisar los registros del firewall en busca de las IP externas involucradas y notificar al responsable de seguridad de la informacion antes de continuar con otros diagnosticos."
+  }
+]
