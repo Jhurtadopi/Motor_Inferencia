@@ -4,7 +4,7 @@ Sistema experto basado en reglas con encadenamiento hacia adelante. La base de c
 
 ## Integrante
 
-- José Rafael Held Gual
+- Julian David HUrtado Pineda
 
 ## Requisitos e instalación
 
