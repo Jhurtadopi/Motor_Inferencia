@@ -28,7 +28,7 @@ python3 interfaz_web.py
 Abre `http://127.0.0.1:8000` en el navegador (el servidor solo escucha en el propio equipo). Opciones: `--puerto 9000`, `--sin-navegador`.
 
 1. **Base de conocimiento:** cargue un `.json` o use la base por defecto.
-2. **Hechos iniciales:** marque los síntomas, elija un caso de ejemplo o cargue un caso `.json`.
+2. **Hechos iniciales:** marque los síntomas, elija un caso de ejemplo o cargue un caso `.json`. Con «Guardar caso» los síntomas marcados se guardan en `casos/` (aparecen en la lista de casos de ejemplo).
 3. **Inferencia:** «Siguiente paso» muestra una iteración a la vez (conjunto de conflicto, criterios de desempate, regla disparada, hechos nuevos); «Ejecutar todo» muestra todo de una vez.
 4. **Recomendación:** al terminar aparecen los diagnósticos ordenados por prioridad y se puede descargar el reporte.
 
