@@ -13,6 +13,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 import threading
 import webbrowser
@@ -66,6 +67,40 @@ def ejecutar_inferencia(cuerpo):
         "recomendaciones": motor.obtener_recomendaciones(pasos),
         "reporte": motor.texto_reporte(validos, hechos_finales, pasos, desconocidos),
     }
+
+
+PATRON_NOMBRE = re.compile(r"^[A-Za-z0-9_-]{1,60}$")
+PATRON_HECHO = re.compile(r"^[a-z0-9_]{1,80}$")
+
+
+def guardar_caso(cuerpo):
+    """Guarda los hechos marcados como casos/<nombre>.json (mismo formato que los casos de ejemplo)."""
+    nombre = cuerpo.get("nombre")
+    if not isinstance(nombre, str) or not PATRON_NOMBRE.match(nombre):
+        raise ValueError("El nombre solo puede tener letras, números, guion y guion bajo (máximo 60)")
+    hechos = cuerpo.get("hechos")
+    if (not isinstance(hechos, list) or not hechos
+            or not all(isinstance(h, str) and PATRON_HECHO.match(h) for h in hechos)):
+        raise ValueError("Marque al menos un síntoma válido para guardar el caso")
+    descripcion = cuerpo.get("descripcion", "")
+    if not isinstance(descripcion, str) or len(descripcion) > 200:
+        raise ValueError("La descripción debe ser texto de hasta 200 caracteres")
+
+    contenido = {}
+    if descripcion.strip():
+        contenido["_descripcion"] = descripcion.strip()
+    for hecho in sorted(set(hechos)):
+        contenido[hecho] = True
+
+    os.makedirs(motor.DIRECTORIO_CASOS, exist_ok=True)
+    ruta = os.path.join(motor.DIRECTORIO_CASOS, nombre + ".json")
+    try:
+        with open(ruta, "x", encoding="utf-8") as archivo:  # "x": nunca sobrescribe un caso existente
+            json.dump(contenido, archivo, ensure_ascii=False, indent=2)
+            archivo.write("\n")
+    except FileExistsError:
+        raise FileExistsError("Ya existe el caso «%s». Elija otro nombre." % nombre)
+    return {"nombre": nombre, "ruta": "casos/%s.json" % nombre}
 
 
 class Manejador(BaseHTTPRequestHandler):
@@ -130,8 +165,14 @@ class Manejador(BaseHTTPRequestHandler):
                 self._responder(200, descripcion_reglas(reglas))
             elif self.path == "/api/inferir":
                 self._responder(200, ejecutar_inferencia(cuerpo))
+            elif self.path == "/api/casos":
+                self._responder(200, guardar_caso(cuerpo))
             else:
                 self._error(404, "Ruta no encontrada")
+        except FileExistsError as error:
+            self._error(409, str(error))
+        except OSError as error:
+            self._error(500, "No se pudo escribir el archivo: %s" % error)
         except ValueError as error:
             self._error(400, str(error))
 

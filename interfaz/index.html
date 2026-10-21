@@ -76,7 +76,9 @@
   }
   .boton input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   .boton { position: relative; display: inline-block; }
-  select { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); max-width: 100%; }
+  select, input[type=text] { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); max-width: 100%; }
+  input[type=text].ancho { flex: 1; min-width: 200px; }
+  .mensaje.ok { background: var(--acento-fondo); color: var(--texto); }
   .estado { color: var(--suave); margin: 10px 0 0; }
   .estado strong { color: var(--texto); }
   #aviso { margin: 0 0 16px; }
@@ -161,6 +163,12 @@
     </div>
     <p class="estado" id="estadoCaso"></p>
     <div class="sintomas" id="sintomas" role="group" aria-label="Síntomas observados"></div>
+    <div class="fila">
+      <label for="nombreCaso" class="vacio" style="font-style:normal">Guardar los síntomas marcados como caso:</label>
+      <input type="text" id="nombreCaso" placeholder="nombre (ej. caso_6)" maxlength="60" autocomplete="off">
+      <input type="text" id="descCaso" placeholder="descripción (opcional)" maxlength="200" autocomplete="off" aria-label="Descripción del caso" class="ancho">
+      <button type="button" id="btnGuardarCaso">Guardar caso</button>
+    </div>
   </section>
 
   <section class="tarjeta" aria-labelledby="t3">
@@ -456,17 +464,41 @@ function descargarReporte() {
 
 /* ------------------------------ Arranque ------------------------------ */
 
+let casosCargados = [];
+
 async function cargarCasos() {
   try {
     const { casos } = await api("/api/casos");
-    const sel = $("selCaso");
-    for (const caso of casos) {
-      sel.append(el("option", { value: caso.nombre }, caso.nombre + (caso.descripcion ? " — " + caso.descripcion : "")));
-    }
-    sel.addEventListener("change", () => {
-      const caso = casos.find((c) => c.nombre === sel.value);
-      if (caso) aplicarHechos(caso.hechos, "Caso " + caso.nombre);
+    casosCargados = casos;
+    $("selCaso").replaceChildren(
+      el("option", { value: "" }, "Seleccione…"),
+      ...casos.map((caso) => el("option", { value: caso.nombre },
+        caso.nombre + (caso.descripcion ? " — " + caso.descripcion : ""))));
+  } catch (e) { mostrarMensajes([["error", e.message]]); }
+}
+
+async function guardarCaso() {
+  const nombre = $("nombreCaso").value.trim();
+  if (!/^[A-Za-z0-9_-]{1,60}$/.test(nombre)) {
+    mostrarMensajes([["error", "Escriba un nombre para el caso (letras, números, guion y guion bajo)."]]);
+    return;
+  }
+  if (estado.seleccion.size === 0) {
+    mostrarMensajes([["error", "Marque al menos un síntoma para guardar el caso."]]);
+    return;
+  }
+  try {
+    const r = await api("/api/casos", {
+      nombre,
+      descripcion: $("descCaso").value.trim(),
+      hechos: [...estado.seleccion].sort(),
     });
+    await cargarCasos();
+    $("selCaso").value = r.nombre;
+    $("nombreCaso").value = "";
+    $("descCaso").value = "";
+    mostrarMensajes([["ok", "Caso guardado en " + r.ruta]]);
+    $("estadoCaso").textContent = "Caso " + r.nombre + ": " + estado.seleccion.size + " síntoma(s) marcado(s)";
   } catch (e) { mostrarMensajes([["error", e.message]]); }
 }
 
@@ -474,6 +506,11 @@ $("btnSiguiente").addEventListener("click", siguiente);
 $("btnTodo").addEventListener("click", ejecutarTodo);
 $("btnReiniciar").addEventListener("click", reiniciar);
 $("btnDescargar").addEventListener("click", descargarReporte);
+$("btnGuardarCaso").addEventListener("click", guardarCaso);
+$("selCaso").addEventListener("change", () => {
+  const caso = casosCargados.find((c) => c.nombre === $("selCaso").value);
+  if (caso) aplicarHechos(caso.hechos, "Caso " + caso.nombre);
+});
 $("btnKbDefecto").addEventListener("click", cargarKbDefecto);
 $("btnNinguno").addEventListener("click", () => { estado.seleccion.clear(); dibujarSintomas(); reiniciar(); $("estadoCaso").textContent = ""; });
 $("archivoKb").addEventListener("change", (e) => { if (e.target.files[0]) cargarKbArchivo(e.target.files[0]); e.target.value = ""; });
