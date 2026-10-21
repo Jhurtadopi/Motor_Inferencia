@@ -2,9 +2,10 @@
 
 Sistema experto basado en reglas con encadenamiento hacia adelante. La base de conocimiento se carga desde un archivo JSON externo, los hechos iniciales se ingresan por archivo, por interacción o desde la interfaz gráfica, y la inferencia se muestra paso a paso hasta entregar una recomendación.
 
-## Integrante
+## Integrantes
 
 - Julian David HUrtado Pineda
+- Oscar David Gomez Mosquera
 
 ## Requisitos e instalación
 
